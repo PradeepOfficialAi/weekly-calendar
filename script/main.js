@@ -29,7 +29,8 @@ function resetActive() {
      currentDate = moment(`${enterCurrentYear}-${enterCurrentWeek}-${enterCurrentDate}`)
     weekStart = currentDate.clone().startOf('week')
     displayFunc(weekStart)
-
+    document.getElementsByClassName('input1')[0].value = currentWeekNumber
+    document.getElementsByClassName('input2')[0].value = enterCurrentYear
     currentWeek = 0
     weekPrev = 0
     weekNext = 0
@@ -40,14 +41,14 @@ function updateWeekYear(value, defType) {
     const node = document.getElementsByClassName(`${value}`)[0];
     node.addEventListener("keyup", ({key}) => {
         if (key === "Enter") {
-            console.log(document.getElementsByClassName(`${value}`)[0].value);
+            // console.log(document.getElementsByClassName(`${value}`)[0].value);
             if (defType === 'year') {
                 let findDays = (currentWeekNumber * 7)
                 enterCurrentDate = currentDateFor.dayOfYear(findDays)._d.getDate()
-                enterCurrentYear = document.getElementsByClassName(`${value}`)[0].value
+                enterCurrentYear = parseInt(document.getElementsByClassName(`${value}`)[0].value)
             } else if(defType === 'week') {
                 let findMonth = document.getElementsByClassName(`${value}`)[0].value
-                currentWeekNumber = findMonth
+                currentWeekNumber = parseInt(findMonth)
                 let findDays = (findMonth * 7)
                 enterCurrentWeek = Math.ceil(findDays/30)
                 enterCurrentDate = currentDateFor.dayOfYear(findDays)._d.getDate()
@@ -55,6 +56,8 @@ function updateWeekYear(value, defType) {
             currentDate = moment(`${enterCurrentYear}-${enterCurrentWeek}-${enterCurrentDate}`)
             weekStart = currentDate.clone().startOf('week')
             displayFunc(weekStart)
+            document.getElementsByClassName('input1')[0].value = currentWeekNumber
+            document.getElementsByClassName('input2')[0].value = enterCurrentYear
         }
     })
 }
@@ -82,16 +85,15 @@ function prevWeekFunc(value, weekPrevIn) {
 function updateWeek(value, method) {
     currentWeek += value
     if ('add' === method) {
-        document.getElementsByClassName('input1')[0].value = currentWeekNumber+=1
+        document.getElementsByClassName('input1')[0].value = (currentWeekNumber = parseInt(currentWeekNumber) + 1)
         nextWeekFunc(value, currentWeek)
     } else if('sub' === method) {
-        document.getElementsByClassName('input1')[0].value = currentWeekNumber-= 1
+        document.getElementsByClassName('input1')[0].value = currentWeekNumber = parseInt(currentWeekNumber) - 1
         prevWeekFunc(value, currentWeek)
     }
 }
 function displayFunc(weekDays) {
-    document.getElementsByClassName('input1')[0].value = currentWeekNumber
-    document.getElementsByClassName('input2')[0].value = enterCurrentYear
+
     for (let index = 0; index <= 6; index++) {
         console.log(moment(weekDays).add(index, 'days').format("DD MM"));
         currentDay.push(moment(weekDays).add(index, 'days').format("DD"))
